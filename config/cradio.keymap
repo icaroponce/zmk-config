@@ -20,7 +20,7 @@
   combo_##NAME { \
     bindings = <BINDINGS>; \
     key-positions = <KEYPOS>; \
-    timeout-ms = <50>; \
+    timeout-ms = <40>; \
   };
 
 &mt {
@@ -41,8 +41,7 @@
         */
         compatible = "zmk,combos";
         COMBO(caps_word, &caps_word, 20 29)
-        COMBO(esc, &kp ESC, 10 19)
-        COMBO(esc3, &kp ESC, 22 23)
+        // COMBO(esc, &kp ESC, 10 19)
         COMBO(repeat, &key_repeat, 4 5)
         COMBO(under, &kp UNDER, 23 26)
         COMBO(ralt, &sk RALT, 30 33)
@@ -107,10 +106,10 @@
             bindings = <
         // ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮   ╭─────────────┬─────────────┬─────────────┬─────────────┬─────────────╮
         // │             │             │             │ !           │ ` ~         │   │             │             │             │             │             │
-             ___           ___           ___           &kp EXCL      &kp GRAVE         ___           ___           ___           ___           ___ 
+             &kp ESC       &kp CAPS      ___           &kp EXCL      &kp GRAVE         ___           ___           ___           ___           ___ 
         // ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤   ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
         // │ ^           │ @           │ #           │ ?           │ $           │   │             │             │             │             │             │
-             &kp CARET     &kp AT        &kp HASH      &kp QMARK      &kp DLLR          ___           ___           ___           ___           ___
+             &kp CARET     &kp AT        &kp HASH      &kp QMARK     &kp DLLR          ___           ___           ___           ___           ___
         // ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤   ├─────────────┼─────────────┼─────────────┼─────────────┼─────────────┤
         // │ %           │ &           │ *           │ :           │ ~           │   │             │             │             │             │             │
              &kp PRCNT     &kp AMPS      &kp STAR      &kp COLON     &kp TILDE         ___           ___           ___           ___           ___
