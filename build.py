@@ -3,103 +3,99 @@
 import os
 import argparse
 import subprocess
+import sys
 
 CWD = os.path.abspath(os.path.dirname(__file__))
+ZMK_DIR = os.path.join(CWD, "build", "zmk")
+DOCKER_IMAGE = "zmkfirmware/zmk-build-arm:4.1"
+# Override via env var if your keyboard mounts elsewhere
+FLASH_MOUNT = os.environ.get("ZMK_FLASH_MOUNT", "/media/kb")
 
 
-def west(command: str, workdir="/"):
+def check_setup():
+    if not os.path.exists(ZMK_DIR):
+        print("error: build environment not found — run: python build.py setup", file=sys.stderr)
+        sys.exit(1)
+
+
+def west(command: str, workdir=""):
     subprocess.run(
         [
-            "docker",
-            "run",
-            "--rm",
-            f"--volume={CWD}/build/zmk:/root",
+            "docker", "run", "--rm",
+            f"--volume={ZMK_DIR}:/root",
             f"--volume={CWD}/config:/workspace/config",
             f"--workdir=/root/{workdir}",
-            "zmkfirmware/zmk-build-arm:3.2",
-            "/bin/bash",
-            "-c",
-            command,
+            DOCKER_IMAGE,
+            "/bin/bash", "-c", command,
         ],
         check=True,
     )
 
 
 def build(side: str, pristine=False):
+    check_setup()
     west(
-        " ".join([
-            "west",
-            "build",
+        " ".join(filter(None, [
+            "west build",
             "-p" if pristine else "",
             f"-d build/{side}",
-            "-b nice_nano_v2",
+            "-b nice_nano//zmk",
             f"-- -DSHIELD=cradio_{side}",
-            "-D ZMK_CONFIG=/workspace/config",
-        ]),
+            "-DZMK_CONFIG=/workspace/config",
+        ])),
         workdir="app",
     )
 
 
-def reset():
-    subprocess.run(
-        ["cp", f"{CWD}/compiled/reset.uf2", "/Volumes/NICENANO"],
-        check=True,
-    )
-
-
 def flash(side: str):
-    subprocess.run(
-        [
-            "cp", f"{CWD}/build/zmk/app/build/{side}/zephyr/zmk.uf2",
-            "/Volumes/NICENANO"
-        ],
-        check=True,
-    )
+    check_setup()
+    src = os.path.join(ZMK_DIR, "app", "build", side, "zephyr", "zmk.uf2")
+    if not os.path.exists(src):
+        print(f"error: firmware not found at {src} — run build first", file=sys.stderr)
+        sys.exit(1)
+    if not os.path.exists(FLASH_MOUNT):
+        print(f"error: {FLASH_MOUNT!r} not found — is the keyboard in bootloader mode?", file=sys.stderr)
+        sys.exit(1)
+    subprocess.run(["cp", src, FLASH_MOUNT], check=True)
+    print(f"flashed {side} → {FLASH_MOUNT}")
 
 
 def setup():
-    """ Setup a local development environment.
-        https://zmk.dev/docs/development/setup
-    """
-    if os.path.exists("build"):
-        raise FileExistsError("`build` already exists")
-    os.mkdir("build")
-    subprocess.run(
-        [
-            "git",
-            "clone",
-            "https://github.com/zmkfirmware/zmk.git",
-            "build/zmk",
-        ],
-        check=True,
-    )
-    west("west init -l app/")
-    west("west update")
+    if not os.path.exists(ZMK_DIR):
+        subprocess.run(
+            ["git", "clone", "https://github.com/zmkfirmware/zmk.git", ZMK_DIR],
+            check=True,
+        )
+    else:
+        print("zmk repo already present, skipping clone")
+
+    west_config = os.path.join(ZMK_DIR, ".west", "config")
+    if not os.path.exists(west_config):
+        west("west init -l app/")
+        west("west update")
+    else:
+        print("west already initialized, skipping")
 
 
-parser = argparse.ArgumentParser(
-    prog="build.py",
-    description="Build our ZMK firmware",
-)
+parser = argparse.ArgumentParser(prog="build.py", description="Build ZMK firmware locally via Docker")
 subparsers = parser.add_subparsers(dest="command")
-build_parser = subparsers.add_parser("build")
-build_parser.add_argument("--pristine", action="store_true")
-build_parser.add_argument("--right", action="store_true")
-build_parser.add_argument("--left", action="store_true")
-subparsers.add_parser("reset")
-subparsers.add_parser("setup")
-flash_parser = subparsers.add_parser("flash")
+
+build_parser = subparsers.add_parser("build", help="compile firmware")
+build_parser.add_argument("--pristine", action="store_true", help="clean build")
+
+flash_parser = subparsers.add_parser("flash", help="copy firmware to keyboard in bootloader mode")
 flash_parser.add_argument("side", choices=["left", "right"])
 
+subparsers.add_parser("setup", help="clone ZMK and initialize west (first-time only)")
+
 args = parser.parse_args()
+
 if args.command == "build":
-    if not args.right or args.left:
-        build("left", pristine=args.pristine)
-    if not args.left or args.right:
-        build("right", pristine=args.pristine)
-if args.command == "reset":
-    reset()
-if args.command == "flash":
+    build("left", pristine=args.pristine)
+    build("right", pristine=args.pristine)
+elif args.command == "flash":
     flash(args.side)
-if args.command == "setup":
+elif args.command == "setup":
     setup()
+else:
+    parser.print_help()
