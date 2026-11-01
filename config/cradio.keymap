@@ -67,90 +67,90 @@
         COMBO(del,       &kp DEL,     28 29)
 
         // ── dead keys — left-hand column pairs (top row + home row) ───────────
-        //   col 0  '  + A  →  acute    (á é í ó ú)
-        //   col 1  ,  + O  →  grave    (à è ì ò ù)
-        //   col 2  .  + E  →  circumflex (â ê ô û)
-        //   col 3  P  + U  →  tilde    (ã õ ñ)
-        //   col 4  Y  + I  →  diaeresis  (ä ë ï ö ü)
-
-        combo_dead_acute_lnx {
-            bindings = <&kp RA(SQT)>;        // AltGr + '
-            key-positions = <0 10>;
-            timeout-ms = <40>; require-prior-idle-ms = <150>;
-            layers = <DVORAK NAV FUN SYM NUM>;
-        };
-        combo_dead_acute_mac {
-            bindings = <&kp LA(E)>;           // Option + E
-            key-positions = <0 10>;
-            timeout-ms = <40>; require-prior-idle-ms = <150>;
-            layers = <MACOS>;
-        };
+        //   col 1  '  + A  →  grave      (à è ì ò ù)
+        //   col 2  ,  + O  →  tilde      (ã õ ñ)
+        //   col 3  .  + E  →  acute      (á é í ó ú)
+        //   col 4  P  + U  →  diaeresis  (ä ë ï ö ü)
+        //   col 5  Y  + I  →  circumflex (â ê ô û)
 
         combo_dead_grave_lnx {
             bindings = <&kp RA(GRAVE)>;       // AltGr + `
-            key-positions = <1 11>;
+            key-positions = <0 10>;
             timeout-ms = <40>; require-prior-idle-ms = <150>;
             layers = <DVORAK NAV FUN SYM NUM>;
         };
         combo_dead_grave_mac {
             bindings = <&kp LA(GRAVE)>;       // Option + `
-            key-positions = <1 11>;
-            timeout-ms = <40>; require-prior-idle-ms = <150>;
-            layers = <MACOS>;
-        };
-
-        combo_dead_circ_lnx {
-            bindings = <&kp RA(N6)>;          // AltGr + 6
-            key-positions = <2 12>;
-            timeout-ms = <40>; require-prior-idle-ms = <150>;
-            layers = <DVORAK NAV FUN SYM NUM>;
-        };
-        combo_dead_circ_mac {
-            bindings = <&kp LA(I)>;           // Option + I
-            key-positions = <2 12>;
+            key-positions = <0 10>;
             timeout-ms = <40>; require-prior-idle-ms = <150>;
             layers = <MACOS>;
         };
 
         combo_dead_tilde_lnx {
             bindings = <&kp LS(RA(GRAVE))>;   // AltGr + Shift + `
-            key-positions = <3 13>;
+            key-positions = <1 11>;
             timeout-ms = <40>; require-prior-idle-ms = <150>;
             layers = <DVORAK NAV FUN SYM NUM>;
         };
         combo_dead_tilde_mac {
             bindings = <&kp LA(N)>;           // Option + N
-            key-positions = <3 13>;
+            key-positions = <1 11>;
+            timeout-ms = <40>; require-prior-idle-ms = <150>;
+            layers = <MACOS>;
+        };
+
+        combo_dead_acute_lnx {
+            bindings = <&kp RA(SQT)>;        // AltGr + '
+            key-positions = <2 12>;
+            timeout-ms = <40>; require-prior-idle-ms = <150>;
+            layers = <DVORAK NAV FUN SYM NUM>;
+        };
+        combo_dead_acute_mac {
+            bindings = <&kp LA(E)>;           // Option + E
+            key-positions = <2 12>;
             timeout-ms = <40>; require-prior-idle-ms = <150>;
             layers = <MACOS>;
         };
 
         combo_dead_diaer_lnx {
             bindings = <&kp LS(RA(SQT))>;     // AltGr + Shift + '
-            key-positions = <4 14>;
+            key-positions = <3 13>;
             timeout-ms = <40>; require-prior-idle-ms = <150>;
             layers = <DVORAK NAV FUN SYM NUM>;
         };
         combo_dead_diaer_mac {
             bindings = <&kp LA(U)>;           // Option + U
+            key-positions = <3 13>;
+            timeout-ms = <40>; require-prior-idle-ms = <150>;
+            layers = <MACOS>;
+        };
+
+        combo_dead_circ_lnx {
+            bindings = <&kp RA(N6)>;          // AltGr + 6
+            key-positions = <4 14>;
+            timeout-ms = <40>; require-prior-idle-ms = <150>;
+            layers = <DVORAK NAV FUN SYM NUM>;
+        };
+        combo_dead_circ_mac {
+            bindings = <&kp LA(I)>;           // Option + I
             key-positions = <4 14>;
             timeout-ms = <40>; require-prior-idle-ms = <150>;
             layers = <MACOS>;
         };
 
         // ── direct chars ──────────────────────────────────────────────────────
-        //   ß  →  S + Z  (right pinky, home + bottom)
+        //   ß  →  R + N  (right ring, top + home)
         //   ç  →  C + T  (right middle, top + home)
 
         combo_ssharp_lnx {
             bindings = <&kp RA(S)>;           // AltGr + S
-            key-positions = <19 29>;
+            key-positions = <8 18>;
             timeout-ms = <40>; require-prior-idle-ms = <150>;
             layers = <DVORAK NAV FUN SYM NUM>;
         };
         combo_ssharp_mac {
             bindings = <&kp LA(S)>;           // Option + S
-            key-positions = <19 29>;
+            key-positions = <8 18>;
             timeout-ms = <40>; require-prior-idle-ms = <150>;
             layers = <MACOS>;
         };

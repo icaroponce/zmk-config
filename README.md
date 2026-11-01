@@ -37,3 +37,42 @@ python build.py flash left
 ```
 
 The drive unmounts itself automatically once flashing is done.
+
+## Special characters
+
+The keyboard runs `us(altgr-intl)` on Linux and the standard US layout on macOS. All special character access is handled through ZMK combos — no AltGr key-hold required.
+
+### OS mode toggle
+
+The dead key combos send different keycodes depending on the active OS mode. Default is Linux.
+
+| Action | Keys |
+|--------|------|
+| Toggle macOS mode on/off | FUN layer (hold right thumb) → right pinky top key (`L` position) |
+| Check current mode | Press `F + G + C` simultaneously — types `lnx` or `mac` |
+
+### Dead keys (left-hand column pairs)
+
+Press both keys simultaneously, release, then type the vowel.
+
+Ordered by finger strength — most-used dead key on the strongest finger.
+
+| Combo | Finger | Dead key | Composes |
+|-------|--------|----------|---------|
+| `'` + `A` | pinky | grave ` | à è ì ò ù |
+| `,` + `O` | ring | tilde ~ | ã õ ñ |
+| `.` + `E` | middle | acute ´ | á é í ó ú ý |
+| `P` + `U` | index | diaeresis ¨ | ä ë ï ö ü |
+| `Y` + `I` | inner | circumflex ^ | â ê î ô û |
+
+### Direct characters
+
+| Combo | Character |
+|-------|-----------|
+| `R` + `N` | ß |
+| `C` + `T` | ç |
+
+### Notes
+
+- All combos require a brief pause (~150ms) after the last typed key before they fire — this prevents accidental triggers during normal typing.
+- For any other AltGr/Option character not covered above, use the sticky RALT combo: press both inner thumbs (`TAB + BSPC`) simultaneously, release, then press the target key.
